@@ -1,0 +1,50 @@
+
+
+plugins {
+	id 'org.springframework.boot'  version '2.1.8.RELEASE'
+	id 'io.spring.dependency-management'  version '1.0.8.RELEASE'
+	id 'org.jetbrains.kotlin.jvm' version '1.2.71'
+	id 'org.jetbrains.kotlin.plugin.spring' version '1.2.71'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	jcenter()
+	mavenCentral()
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis' 
+//	compile 'org.springframework.boot:spring-boot-starter-web' 
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.1.7.RELEASE'
+	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin' 
+	implementation 'org.jetbrains.kotlin:kotlin-reflect' 
+	implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8' 
+	testImplementation 'org.springframework.boot:spring-boot-starter-test' 
+}
+
+
+
+
+def dependenciesCopyTargetDirName = '/Users/keisuke/eclipse-workspace/makeoneworld/lib'
+
+task copyTestDependencies(type: Copy){
+	from configurations.testRuntime
+	into dependenciesCopyTargetDirName
+}
+
+task copyDependencies(type: Copy, dependsOn: copyTestDependencies) {
+  from sourceSets.main.runtimeClasspath
+  into dependenciesCopyTargetDirName
+}
